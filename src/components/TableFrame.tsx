@@ -33,10 +33,12 @@ class TableFrame extends React.Component {
 	/**Calls render of TableRow if there are record */
 	tableBodyContent () {
 		const props:any = this.props;
-		if (props.usersDB.length !== 0) {
-			return <TableRows />
+		if (props.usersDB.length === 0) {
+			return <tr>
+				<td className="noDataTDClass" colSpan={6}>No data to show</td>
+			</tr>;
 		} else {
-			return "";
+			return <TableRows />
 		}
 	};
 

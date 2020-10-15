@@ -38,6 +38,11 @@ h1 {
 	background-color: #efefef;
 }
 
+.noDataTDClass {
+	font-size: 14px;
+	text-align: center;
+}
+
 .tableFrame tr.recordRow:hover td.recordActions button,
 .tableFrame td.recordActions:hover button {
 	display: inline-block;
