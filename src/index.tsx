@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import './index.css';
-import usersJSON from './users.json';
+// import usersJSON from './users.json';
 import UserRecord from './inerfaces/UserRecord';
 import TableFrame from './components/TableFrame';
 import NewRecordForm from './components/NewRecordForm';
@@ -11,14 +11,14 @@ import AppUtils from './app-utils';
 
 /**Initial state of the Redux store */
 const initialState = {
-  usersDB: usersJSON,
+  usersDB: [],
   sortByColumn: "first_name",
   currentPage: 1,
   recordsPerPage: 10,
   showForm: false,
   recordIndexForEdit: null
 };
-let _allRecords:any = usersJSON;
+let _allRecords:any = [];
 /**Reducer function for the Redux store */
 const reducer = (state:any = initialState, action:any) => {
 	switch (action.type) {

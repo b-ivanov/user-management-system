@@ -69,7 +69,7 @@ class HeaderRow extends React.Component {
 	/**Component render function */
 	render () {
 		const props:any = this.props;
-		let fields:string[] = ["id", "first_name", "last_name", "email", "gender", "job_title"];
+		let fields:string[] = ["first_name", "last_name", "email", "gender", "job_title"];
 		if (props.usersDB[0]) {
 			fields = Object.keys(props.usersDB[0]);
 			fields.shift();

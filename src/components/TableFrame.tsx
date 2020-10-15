@@ -44,7 +44,10 @@ class TableFrame extends React.Component {
 	render () {
 		const props:any = this.props;
 		const numOfRecords:number = props.usersDB.length;
-		const numOfPages:number = Math.ceil(numOfRecords / props.recordsPerPage);
+		let numOfPages:number = Math.ceil(numOfRecords / props.recordsPerPage);
+		if (numOfPages === 0) {
+			numOfPages = 1;
+		}
 		return (
 			<>
 				<h1>User management table</h1>
