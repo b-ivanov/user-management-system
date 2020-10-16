@@ -12,8 +12,9 @@ const AppUtils:any = {
 		sortByColumn: state.sortByColumn,
 		currentPage: state.currentPage,
 		recordsPerPage: state.recordsPerPage,
+		recordIndexForEdit: state.recordIndexForEdit,
 		showForm: state.showForm,
-		recordIndexForEdit: state.recordIndexForEdit
+		showLoading: state.showLoading
 	}),
 
 	/**Makes header texts pretty */

@@ -99,7 +99,7 @@ class NewRecordForm extends React.Component {
 				buttonText = "Edit";
 				dummyRecord = props.usersDB[recordInd];
 			}
-			return (<div className="formOverlay">
+			return (<div className="screenOverlay">
 				<form className="recordEditForm">
 					<h1>{heading}</h1>
 					<label>First name</label>

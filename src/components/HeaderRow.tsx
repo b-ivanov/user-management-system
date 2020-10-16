@@ -70,10 +70,6 @@ class HeaderRow extends React.Component {
 	render () {
 		const props:any = this.props;
 		let fields:string[] = ["first_name", "last_name", "email", "gender", "job_title"];
-		if (props.usersDB[0]) {
-			fields = Object.keys(props.usersDB[0]);
-			fields.shift();
-		}
 		let cls:string;
 		let clsName:string;
 		let columnForSort:string = props.sortByColumn;

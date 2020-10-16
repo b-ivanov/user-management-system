@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import './index.css';
-// import usersJSON from './users.json';
 import UserRecord from './inerfaces/UserRecord';
 import TableFrame from './components/TableFrame';
 import NewRecordForm from './components/NewRecordForm';
+import LoadingOverlay from './components/LoadingOverlay';
 import AppUtils from './app-utils';
+import usersTableActions from './services/usersTableActions';
 
 /**Initial state of the Redux store */
 const initialState = {
@@ -15,13 +16,34 @@ const initialState = {
   sortByColumn: "first_name",
   currentPage: 1,
   recordsPerPage: 10,
+  recordIndexForEdit: null,
   showForm: false,
-  recordIndexForEdit: null
+  showLoading: true
 };
+
+/**Data retriver from IndexedDB */
+const dataTranslator:usersTableActions = new usersTableActions();
 let _allRecords:any = [];
+
 /**Reducer function for the Redux store */
 const reducer = (state:any = initialState, action:any) => {
 	switch (action.type) {
+		case "UPDATE_TABLE_VALUES": //action for updating table vlues
+			if (action.data && action.data.length > 0) {
+				_allRecords = action.data;
+				let newSort:UserRecord[] = action.data;
+				newSort.sort(AppUtils.dynamicSort(state.sortByColumn));
+				return {
+					usersDB: newSort,
+					sortByColumn: state.sortByColumn,
+					currentPage: state.currentPage,
+					recordsPerPage: state.recordsPerPage,
+					recordIndexForEdit: null,
+					showForm: false,
+					showLoading: false
+				};
+			}
+			break;
 		case "SORT_TABLE": //action for sorting the table
 			if (action.sortByColumn) {
 				const newSortColumn:string = action.sortByColumn;
@@ -32,8 +54,9 @@ const reducer = (state:any = initialState, action:any) => {
 					sortByColumn: newSortColumn,
 					currentPage: state.currentPage,
 					recordsPerPage: state.recordsPerPage,
+					recordIndexForEdit: null,
 					showForm: state.showForm,
-					recordIndexForEdit: null
+					showLoading: state.showLoading
 				};
 			}
 			break;
@@ -47,8 +70,9 @@ const reducer = (state:any = initialState, action:any) => {
 					sortByColumn: state.sortByColumn,
 					currentPage: 1,
 					recordsPerPage: state.recordsPerPage,
+					recordIndexForEdit: null,
 					showForm: false,
-					recordIndexForEdit: null
+					showLoading: state.showLoading
 				};
 			}
 			break;
@@ -58,8 +82,9 @@ const reducer = (state:any = initialState, action:any) => {
 				sortByColumn: state.sortByColumn,
 				currentPage: state.currentPage,
 				recordsPerPage: state.recordsPerPage,
+				recordIndexForEdit: null,
 				showForm: false,
-				recordIndexForEdit: null
+				showLoading: state.showLoading
 			};
 		case "CHANGE_PAGE": //action for changing the page
 			if (action.newPageNum) {
@@ -68,8 +93,9 @@ const reducer = (state:any = initialState, action:any) => {
 					sortByColumn: state.sortByColumn,
 					currentPage: action.newPageNum,
 					recordsPerPage: state.recordsPerPage,
+					recordIndexForEdit: null,
 					showForm: false,
-					recordIndexForEdit: null
+					showLoading: state.showLoading
 				};
 			}
 			break;
@@ -79,52 +105,50 @@ const reducer = (state:any = initialState, action:any) => {
 				sortByColumn: state.sortByColumn,
 				currentPage: state.currentPage,
 				recordsPerPage: state.recordsPerPage,
+				recordIndexForEdit: action.recordIndexForEdit,
 				showForm: action.showForm,
-				recordIndexForEdit: action.recordIndexForEdit
+				showLoading: state.showLoading
 			};
 		case "RECORD_CREATE": //action for creating a new record
-			if (action.recordUpdate) {
-				_allRecords = _allRecords.concat(action.recordUpdate);
-				let users:any = state.usersDB.concat(action.recordUpdate);
-				users.sort(AppUtils.dynamicSort(state.sortByColumn));
-				return {
-					usersDB: users,
-					sortByColumn: state.sortByColumn,
-					currentPage: state.currentPage,
-					recordsPerPage: state.recordsPerPage,
-					showForm: action.showForm,
-					recordIndexForEdit: null
-				};
-			}
-			break;
 		case "RECORD_UPDATE": //action for updating an exisitng record
 			if (action.recordUpdate) {
-				let users:any = state.usersDB;
-				users[state.recordIndexForEdit] = action.recordUpdate;
-				users.sort(AppUtils.dynamicSort(state.sortByColumn));
+				dataTranslator.addUser(action.recordUpdate, (allUsers:UserRecord[]) => {
+					if (allUsers !== null) {
+						store.dispatch({
+							type: "UPDATE_TABLE_VALUES",
+							data: allUsers
+						});
+					}
+				});
 				return {
-					usersDB: users,
+					usersDB: state.usersDB,
 					sortByColumn: state.sortByColumn,
 					currentPage: state.currentPage,
 					recordsPerPage: state.recordsPerPage,
-					showForm: action.showForm,
-					recordIndexForEdit: null
+					recordIndexForEdit: null,
+					showForm: false,
+					showLoading: true
 				};
 			}
 			break;
 		case "DELETE_RECORD": //action for deleting record
-			if (action.recordIndex >= 0) {
-				let users:any[] = state.usersDB;
-				users = users.filter((elem, index) => {
-					return (action.recordIndex !== index);
+			if (typeof action.recordID === "string") {
+				dataTranslator.deleteUser(action.recordID, (allUsers:UserRecord[]) => {
+					if (allUsers !== null) {
+						store.dispatch({
+							type: "UPDATE_TABLE_VALUES",
+							data: allUsers
+						});
+					}
 				});
 				return {
-					usersDB: users,
+					usersDB: state.usersDB,
 					sortByColumn: state.sortByColumn,
 					currentPage: state.currentPage,
 					recordsPerPage: state.recordsPerPage,
+					recordIndexForEdit: null,
 					showForm: false,
-					recordIndexForEdit: null
+					showLoading: true
 				};
 			}
 			break;
@@ -136,15 +160,19 @@ const reducer = (state:any = initialState, action:any) => {
 
 /**Creating the Redux store */
 const store = createStore(reducer);
-/**Initially sorting the table on load */
-store.dispatch({
-	type: "SORT_TABLE",
-	sortByColumn: initialState.sortByColumn
+
+/**Initially getting data from indexedDB */
+dataTranslator.getAllUsers((allUsers:UserRecord[]) => {
+	store.dispatch({
+		type: "UPDATE_TABLE_VALUES",
+		data: allUsers
+	});
 });
 
 /**Main component render function */
 const App = () => (
 	<Provider store={store}>
+		<LoadingOverlay />
 		<NewRecordForm />
 		<TableFrame />
 	</Provider>

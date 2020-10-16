@@ -8,12 +8,11 @@ class TableRows extends React.Component {
 	/**Calls dispatch for deleting a record */
 	deleteRecord (user:UserRecord) {
 		const props:any = this.props;
-		const recordIndex:number = AppUtils.getIndexOfRecord(props.usersDB, "id", user.id);
 		const answer:boolean = window.confirm("You are about to delete user '" + user.first_name + " " + user.last_name + "'!");
-		if (recordIndex >= 0 && answer) {
+		if (answer) {
 			props.dispatch({
 				type: "DELETE_RECORD",
-				recordIndex: recordIndex
+				recordID: user.id
 			});
 		}
 	};

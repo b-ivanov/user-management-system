@@ -191,7 +191,7 @@ td.recordActions button {
 	to { opacity: 1; }
 }
 
-.formOverlay {
+.screenOverlay {
 	background-color: #FFFFFFCC;
 	position: absolute;
 	top: 0px;
@@ -202,9 +202,10 @@ td.recordActions button {
 	animation: fadeIn 200ms linear;
 	-moz-animation: fadeIn 200ms linear;
 	-webkit-animation: fadeIn 200ms linear;
+	text-align: center;
 }
 
-.formOverlay .recordEditForm {
+.screenOverlay .recordEditForm {
 	width: 20%;
 	min-width: 300px;
 	margin: 50px auto;
@@ -212,26 +213,27 @@ td.recordActions button {
 	border: 1px solid #efefef;
 	background-color: #f7f7f7;
 	box-shadow: 0px 0px 3px #858585;
+	text-align: left;
 }
-.formOverlay .recordEditForm .buttonsContainer {
+.screenOverlay .recordEditForm .buttonsContainer {
 	padding: 20px;
     border-top: 1px solid #efefef;
     background-color: #fff;
 }
 
-.formOverlay .recordEditForm label:first-of-type {
+.screenOverlay .recordEditForm label:first-of-type {
 	border-top: 1px solid #efefef;
 	padding: 20px 20px 5px 20px;
 }
 
-.formOverlay .recordEditForm label {
+.screenOverlay .recordEditForm label {
 	display: block;
     font-weight: 600;
     padding: 0px 20px 5px 20px;
     color: #656565;
 }
 
-.formOverlay .recordEditForm input, .formOverlay .recordEditForm select {
+.screenOverlay .recordEditForm input, .screenOverlay .recordEditForm select {
 	display: block;
     width: calc(100% - 48px);
     margin: 0px 20px 20px 20px;
@@ -245,8 +247,33 @@ td.recordActions button {
 	box-sizing: content-box;
 }
 
-.formOverlay .recordEditForm input::placeholder {
+.screenOverlay .recordEditForm input::placeholder {
 	color: #bbb;
+}
+
+@-webkit-keyframes spin {
+	0% { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(360deg); }
+}
+  
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+.screenOverlay .loadingWheel {
+	margin: 10em auto 10px auto;
+	border: 0.7em solid #a298d8;
+	border-radius: 50%;
+	border-top: 0.7em solid #3f51b5;
+	width: 3em;
+	height: 3em;
+	-webkit-animation: spin 1s linear infinite;
+	animation: spin 1s linear infinite;
+}
+
+.screenOverlay .loadingText {
+	color: #858585;
 }
 
 button.uiBtn {
