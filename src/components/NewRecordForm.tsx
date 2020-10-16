@@ -15,18 +15,24 @@ class NewRecordForm extends React.Component {
 	getFormData (checkForDuplicate:boolean) {
 		let recordObj:any = {};
 		let inputs:any = document.querySelectorAll("form.recordEditForm input, form.recordEditForm select");
-		let hasErrors:boolean = false;
+		let hasEmptyFields:boolean = false;
 		for (const key in inputs) {
 			if (Object.prototype.hasOwnProperty.call(inputs, key)) {
 				let element:any = inputs[key];
 				if (element.value === "") {
-					hasErrors = true;
+					hasEmptyFields = true;
 					element.style.border = "1px solid red";
 				} else {
-					if (element.type === "number") {
-						recordObj[element.name] = parseFloat(element.value);
+					if (element.checkValidity()) {
+						if (element.type === "number") {
+							recordObj[element.name] = parseFloat(element.value);
+						} else {
+							recordObj[element.name] = element.value;
+						}
 					} else {
-						recordObj[element.name] = element.value;
+						window.alert("Field contains invalid symbols!");
+						element.style.border = "1px solid red";
+						return null;
 					}
 				}
 			}
@@ -36,7 +42,7 @@ class NewRecordForm extends React.Component {
 			window.alert("A record with the same name already exists!");
 			return null;
 		} else {
-			if (hasErrors) {
+			if (hasEmptyFields) {
 				window.alert("All fields are required!");
 				return null;
 			} else {
@@ -103,18 +109,18 @@ class NewRecordForm extends React.Component {
 				<form className="recordEditForm">
 					<h1>{heading}</h1>
 					<label>First name</label>
-					<input name="first_name" type="text" placeholder="John" onFocus={(event:any) => {this.removeRedBorder(event)}} defaultValue={dummyRecord.first_name}/>
+					<input name="first_name" type="text" placeholder="John" pattern="[A-Za-z\-]+" onFocus={(event:any) => {this.removeRedBorder(event)}} defaultValue={dummyRecord.first_name}/>
 					<label>Last name</label>
-					<input name="last_name" type="text" placeholder="Doe" onFocus={(event:any) => {this.removeRedBorder(event)}} defaultValue={dummyRecord.last_name}/>
+					<input name="last_name" type="text" placeholder="Doe" pattern="[A-Za-z\-]+" onFocus={(event:any) => {this.removeRedBorder(event)}} defaultValue={dummyRecord.last_name}/>
 					<label>Email</label>
-					<input name="email" type="text" placeholder="john_doe@mail.com" onFocus={(event:any) => {this.removeRedBorder(event)}} defaultValue={dummyRecord.email}/>
+					<input name="email" type="email" placeholder="john_doe@mail.com" onFocus={(event:any) => {this.removeRedBorder(event)}} defaultValue={dummyRecord.email}/>
 					<label>Gender</label>
 					<select name="gender" onFocus={(event:any) => {this.removeRedBorder(event)}} defaultValue={dummyRecord.gender}>
 						<option value="Male">Male</option>
 						<option value="Female">Female</option>
 					</select>
 					<label>Job title</label>
-					<input name="job_title" type="text" placeholder="Internal auditor" onFocus={(event:any) => {this.removeRedBorder(event)}} defaultValue={dummyRecord.job_title}/>
+					<input name="job_title" type="text" placeholder="Internal auditor" pattern="[A-Za-z\-\s]+" onFocus={(event:any) => {this.removeRedBorder(event)}} defaultValue={dummyRecord.job_title}/>
 					<label className="hiddenElement">ID</label>
 					<input className="hiddenElement" name="id" type="text" defaultValue={dummyRecord.id}/>
 					

@@ -29,19 +29,15 @@ let _allRecords:any = [];
 const reducer = (state:any = initialState, action:any) => {
 	switch (action.type) {
 		case "UPDATE_TABLE_VALUES": //action for updating table vlues
-			if (action.data && action.data.length > 0) {
+			if (action.data && action.data.length > -1) {
 				_allRecords = action.data;
 				let newSort:UserRecord[] = action.data;
 				newSort.sort(AppUtils.dynamicSort(state.sortByColumn));
-				return {
+				return Object.assign({}, state, {
 					usersDB: newSort,
-					sortByColumn: state.sortByColumn,
-					currentPage: state.currentPage,
-					recordsPerPage: state.recordsPerPage,
-					recordIndexForEdit: null,
 					showForm: false,
 					showLoading: false
-				};
+				});
 			}
 			break;
 		case "SORT_TABLE": //action for sorting the table
@@ -49,15 +45,10 @@ const reducer = (state:any = initialState, action:any) => {
 				const newSortColumn:string = action.sortByColumn;
 				let newSort:UserRecord[] = state.usersDB;
 				newSort.sort(AppUtils.dynamicSort(newSortColumn));
-				return {
+				return Object.assign({}, state, {
 					usersDB: newSort,
-					sortByColumn: newSortColumn,
-					currentPage: state.currentPage,
-					recordsPerPage: state.recordsPerPage,
-					recordIndexForEdit: null,
-					showForm: state.showForm,
-					showLoading: state.showLoading
-				};
+					sortByColumn: newSortColumn
+				});
 			}
 			break;
 		case "FILTER_TABLE": //action for filtering the table
@@ -65,50 +56,28 @@ const reducer = (state:any = initialState, action:any) => {
 				const filter:any = AppUtils.dynamicFilter(action.filterObject);
 				const filteredDB:UserRecord[] = _allRecords.filter(filter);
 				filteredDB.sort(AppUtils.dynamicSort(state.sortByColumn));
-				return {
-					usersDB: filteredDB,
-					sortByColumn: state.sortByColumn,
+				return Object.assign({}, state, {
 					currentPage: 1,
-					recordsPerPage: state.recordsPerPage,
-					recordIndexForEdit: null,
-					showForm: false,
-					showLoading: state.showLoading
-				};
+					usersDB: filteredDB
+				});
 			}
 			break;
 		case "CLEAR_FILTER_TABLE": //action for clearing the filters, applied to the table
-			return {
-				usersDB: _allRecords,
-				sortByColumn: state.sortByColumn,
-				currentPage: state.currentPage,
-				recordsPerPage: state.recordsPerPage,
-				recordIndexForEdit: null,
-				showForm: false,
-				showLoading: state.showLoading
-			};
+			return Object.assign({}, state, {
+				usersDB: _allRecords
+			});
 		case "CHANGE_PAGE": //action for changing the page
 			if (action.newPageNum) {
-				return {
-					usersDB: state.usersDB,
-					sortByColumn: state.sortByColumn,
+				return Object.assign({}, state, {
 					currentPage: action.newPageNum,
-					recordsPerPage: state.recordsPerPage,
-					recordIndexForEdit: null,
-					showForm: false,
-					showLoading: state.showLoading
-				};
+				});
 			}
 			break;
 		case "TOGGLE_FORM_DISPLAY": //action for showing or hiding the form
-			return {
-				usersDB: state.usersDB,
-				sortByColumn: state.sortByColumn,
-				currentPage: state.currentPage,
-				recordsPerPage: state.recordsPerPage,
+			return Object.assign({}, state, {
 				recordIndexForEdit: action.recordIndexForEdit,
-				showForm: action.showForm,
-				showLoading: state.showLoading
-			};
+				showForm: action.showForm
+			});
 		case "RECORD_CREATE": //action for creating a new record
 		case "RECORD_UPDATE": //action for updating an exisitng record
 			if (action.recordUpdate) {
@@ -120,15 +89,10 @@ const reducer = (state:any = initialState, action:any) => {
 						});
 					}
 				});
-				return {
-					usersDB: state.usersDB,
-					sortByColumn: state.sortByColumn,
-					currentPage: state.currentPage,
-					recordsPerPage: state.recordsPerPage,
-					recordIndexForEdit: null,
+				return Object.assign({}, state, {
 					showForm: false,
 					showLoading: true
-				};
+				});
 			}
 			break;
 		case "DELETE_RECORD": //action for deleting record
@@ -141,15 +105,10 @@ const reducer = (state:any = initialState, action:any) => {
 						});
 					}
 				});
-				return {
-					usersDB: state.usersDB,
-					sortByColumn: state.sortByColumn,
-					currentPage: state.currentPage,
-					recordsPerPage: state.recordsPerPage,
-					recordIndexForEdit: null,
+				return Object.assign({}, state, {
 					showForm: false,
 					showLoading: true
-				};
+				});
 			}
 			break;
 		default:
