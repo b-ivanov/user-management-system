@@ -1,32 +1,29 @@
 ## Short task description
-This project is a small user management system. It was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and it uses the browser local storage, [IdexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API), to store its data. The data is a list of employees with fields:
-Markup :
-	* first_name - First name of the employee (free text);
-	* last_name - Last name of the employee (free text);
-	* email - Email of the employee (free text);
-	* gender - Gender of the employee (Male/Female); and
-	* job_title - Job title of the employee (free text);
+This project is a small user management system. It was bootstrapped with [React](https://github.com/facebook/create-react-app) and it uses the browser local storage ([IdexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)) to store its data. The data is a list of employees with fields:
+ Markup : * first_name - First name of the employee (free text);
+          * last_name - Last name of the employee (free text);
+          * email - Email of the employee (free text);
+          * gender - Gender of the employee (Male/Female); and
+          * job_title - Job title of the employee (free text);
 The project consists of two views:
 
 ### Users table
 This view displays all of the data stored in the IndexedDB database in a form of a table. The view supports pagination and only 10 records are shown per page. The user can use this view to:
-Markup :
- 	1. Sort the records in the database.
-	2. Filter by a given field the records in the database.
-	3. Add a new record in the database.
-	4. Edit an existing record in the database.
-	5. Delete an existing record in the database.
-	6. Show the number of records in the database.
-	7. Navigate through the pages.
+ Markup : 1. Sort the records in the database.
+          2. Filter by a given field the records in the database.
+          3. Add a new record in the database.
+          4. Edit an existing record in the database.
+          5. Delete an existing record in the database.
+          6. Show the number of records in the database.
+          7. Navigate through the pages.
 
 ### Manipulation form
 This view is accessed when the user has clicked the "Add user" or "Edit user" from the Users table. The Manupulation form is overlayed on the Users table. The key features of this view are:
-Markup :
-	1. Fill-in fields for a new user.
-	2. Edit fields for an existing user.
-	3. Validate each field while typing.
-	4. Shows an error message when a field is left empty (all of them are required).
-	5. Shows an error message when a record with the same email exists.
+ Markup : 1. Fill-in fields for a new user.
+          2. Edit fields for an existing user.
+          3. Validate each field while typing.
+          4. Shows an error message when a field is left empty (all of them are required).
+          5. Shows an error message when a record with the same email exists.
 
 ## Available Scripts
 
