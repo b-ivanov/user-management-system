@@ -247,6 +247,11 @@ td.recordActions button {
 	box-sizing: content-box;
 }
 
+.screenOverlay .recordEditForm input:invalid {
+	border: 1px solid #DD2C00;
+
+}
+
 .screenOverlay .recordEditForm input::placeholder {
 	color: #bbb;
 }

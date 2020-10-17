@@ -129,6 +129,7 @@ dataTranslator.getAllUsers((allUsers:UserRecord[]) => {
 });
 
 /**Main component render function */
+// maybe it is good to use a router to navigate between the views, but it was easier to just add the form as an overlay
 const App = () => (
 	<Provider store={store}>
 		<LoadingOverlay />

@@ -8,7 +8,7 @@ import { v1 as uuidv1 } from 'uuid';
 class NewRecordForm extends React.Component {
 	/**Removes the red border from an input field */
 	removeRedBorder (ev:any) {
-		ev.target.style.boder = "";
+		ev.target.style.border = "";
 	};
 
 	/**Reads all feilds in the form and validates them. If errors are found a corresponding message appears */
@@ -21,25 +21,19 @@ class NewRecordForm extends React.Component {
 				let element:any = inputs[key];
 				if (element.value === "") {
 					hasEmptyFields = true;
-					element.style.border = "1px solid red";
+					element.style.border = "1px solid #DD2C00";
 				} else {
-					if (element.checkValidity()) {
-						if (element.type === "number") {
-							recordObj[element.name] = parseFloat(element.value);
-						} else {
-							recordObj[element.name] = element.value;
-						}
+					if (element.type === "number") {
+						recordObj[element.name] = parseFloat(element.value);
 					} else {
-						window.alert("Field contains invalid symbols!");
-						element.style.border = "1px solid red";
-						return null;
+						recordObj[element.name] = element.value;
 					}
 				}
 			}
 		}
 		const props:any = this.props;
 		if (checkForDuplicate && AppUtils.getIndexOfRecord(props.usersDB, "email", recordObj.email) >= 0) {
-			window.alert("A record with the same name already exists!");
+			window.alert("A record with the same email already exists!");
 			return null;
 		} else {
 			if (hasEmptyFields) {
@@ -109,9 +103,9 @@ class NewRecordForm extends React.Component {
 				<form className="recordEditForm">
 					<h1>{heading}</h1>
 					<label>First name</label>
-					<input name="first_name" type="text" placeholder="John" pattern="[A-Za-z\-]+" onFocus={(event:any) => {this.removeRedBorder(event)}} defaultValue={dummyRecord.first_name}/>
+					<input name="first_name" type="text" placeholder="John" pattern="[A-Za-z\-]{1,20}" onFocus={(event:any) => {this.removeRedBorder(event)}} defaultValue={dummyRecord.first_name}/>
 					<label>Last name</label>
-					<input name="last_name" type="text" placeholder="Doe" pattern="[A-Za-z\-]+" onFocus={(event:any) => {this.removeRedBorder(event)}} defaultValue={dummyRecord.last_name}/>
+					<input name="last_name" type="text" placeholder="Doe" pattern="[A-Za-z\-]{1,20}" onFocus={(event:any) => {this.removeRedBorder(event)}} defaultValue={dummyRecord.last_name}/>
 					<label>Email</label>
 					<input name="email" type="email" placeholder="john_doe@mail.com" onFocus={(event:any) => {this.removeRedBorder(event)}} defaultValue={dummyRecord.email}/>
 					<label>Gender</label>
