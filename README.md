@@ -1,4 +1,4 @@
-## Short task description
+## Description
 This project is a small user management system. It was bootstrapped with [React](https://github.com/facebook/create-react-app) and it uses the browser local storage ([IdexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)) to store its data. The data is a list of employees with fields:
 * first_name - First name of the employee (free text);
 * last_name - Last name of the employee (free text);
